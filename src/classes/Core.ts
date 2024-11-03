@@ -16,15 +16,23 @@ export default class Core extends Utils {
     readonly minio = new Minio();
     processing = false;
     private init_time = new Date().getTime();
+    private first_load = true;
 
     constructor() {
         super(true);
 
-        setInterval(() => this.process(), 10000);
+        setInterval(() => this.process(), 5000);
     }
 
     async process() {
         try {
+            // Wait some seconds to avoid race conditions
+            if (this.first_load) {
+                this.first_load = false;
+                setTimeout(() => this.process(), 5000 + Math.floor(Math.random() * 10000));
+                return;
+            }
+
             // Check if the process is already running
             if (this.processing) return;
             const initProcessTime = new Date().getTime();
