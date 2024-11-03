@@ -7,7 +7,9 @@ x-processor: &processor
   deploy:
     resources:
       limits:
-        memory: 3GB
+        memory: 3g
+  networks:
+    - coolify
 
 services:
   maria:
@@ -27,3 +29,7 @@ services:
     container_name: sina-ym
     environment:
       - PROCESSOR_NAME=Sina
+
+networks:
+  coolify:
+    external: true
