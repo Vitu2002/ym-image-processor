@@ -1,0 +1,42 @@
+{
+    "name": "ym-image-processor",
+    "version": "1.0.0",
+    "description": "Just an image processor",
+    "main": "index.js",
+    "repository": "git@github.com:Vitu2002/ym-image-processor.git",
+    "author": "Vitu2002 <git@vitu2002.dev>",
+    "license": "MIT",
+    "private": false,
+    "scripts": {
+        "build": "tsup src",
+        "dev": "tsx watch src/index.ts",
+        "start": "node dist/index.js"
+    },
+    "devDependencies": {
+        "@types/backblaze-b2": "^1.5.6",
+        "@types/node": "^22.8.7",
+        "@types/os-utils": "^0.0.4",
+        "eslint": "^9.14.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-prettier": "^5.2.1",
+        "prettier": "^3.3.3",
+        "prettier-plugin-prisma": "^5.0.0",
+        "tsup": "^8.3.5",
+        "tsx": "^4.19.2",
+        "typescript": "^5.6.3"
+    },
+    "dependencies": {
+        "@ly-nld/dishook": "^1.0.8",
+        "@prisma/client": "5.21.1",
+        "axios": "^1.7.7",
+        "backblaze-b2": "^1.7.0",
+        "colors": "1.4.0",
+        "dayjs": "^1.11.13",
+        "dotenv": "^16.4.5",
+        "minio": "^8.0.2",
+        "os-utils": "^0.0.14",
+        "prisma": "^5.21.1",
+        "redis": "^4.7.0",
+        "sharp": "^0.33.5"
+    }
+}

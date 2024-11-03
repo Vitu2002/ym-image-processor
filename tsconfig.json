@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "target": "ES2021",
+        "lib": ["ES2021"],
+        "module": "CommonJS",
+        "baseUrl": "./",
+        "paths": {
+            "@core": ["./src/classes/Core", "./dist/classes/Core"],
+            "@class/*": ["./src/classes/*", "./dist/classes/*"],
+            "@main/*": ["./src/*", "./dist/*"]
+        },
+        "allowJs": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "removeComments": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": false,
+        "noImplicitAny": false,
+        "strictNullChecks": false,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
+        "noImplicitThis": true,
+        "noFallthroughCasesInSwitch": false,
+        "skipLibCheck": true
+    },
+    "include": ["./**/*"],
+    "exclude": ["./dist/*"]
+}

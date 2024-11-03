@@ -1,0 +1,35 @@
+version: '3.8'
+
+x-processor: &processor
+  build: .
+  container_name: ym-image-processor
+  restart: unless-stopped
+  networks:
+    - yomu_private
+  deploy:
+    resources:
+      limits:
+        memory: 3GB
+
+services:
+  maria:
+    <<: *processor
+    container_name: maria-ym
+    environment:
+      - PROCESSOR_NAME=Maria
+
+  rose:
+    <<: *processor
+    container_name: rose-ym
+    environment:
+      - PROCESSOR_NAME=Rose
+
+  sina:
+    <<: *processor
+    container_name: sina-ym
+    environment:
+      - PROCESSOR_NAME=Sina
+
+networks:
+  yomu_private:
+    driver: bridge

@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Images {
+  id     Int        @id @default(autoincrement())
+  b2     String     @unique
+  uri    String     @default("/yumu/not-found.avif")
+  v      Int        @default(0)
+  mime   String     @default("image/avif")
+  size   Int        @default(0)
+  width  Int        @default(0)
+  height Int        @default(0)
+  type   ImageTypes
+}
+
+enum ImageTypes {
+  MANGA_COVER
+  MANGA_BANNER
+  CHAPTER_PAGE
+  USER_AVATAR
+  USER_BANNER
+  SCAN_ICON
+  SCAN_BANNER
+}
