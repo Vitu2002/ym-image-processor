@@ -4,8 +4,6 @@ x-processor: &processor
   build: .
   container_name: ym-image-processor
   restart: unless-stopped
-  networks:
-    - yomu_private
   deploy:
     resources:
       limits:
@@ -29,7 +27,3 @@ services:
     container_name: sina-ym
     environment:
       - PROCESSOR_NAME=Sina
-
-networks:
-  yomu_private:
-    driver: bridge
