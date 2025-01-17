@@ -49,17 +49,20 @@ export default class Server extends Utils {
         const sub = this.redis.duplicate();
         await sub.connect();
 
-        await sub.subscribe('check:response', (message: string) => {
+        // Listener para o canal de respostas
+        await sub.subscribe('check:response', async (message: string) => {
             const { id, name }: { id: string; name: ProcessorName } = JSON.parse(message);
 
             if (this.services[name] === 'off') this.startService(name);
 
             if (this.checkStatus.find(status => status.id === id))
                 this.checkStatus = this.checkStatus.filter(status => status.id !== id);
-            this.processQueue();
+
+            await this.processQueue();
         });
 
-        await sub.subscribe('processor:status', (message: string) => {
+        // Listener para atualizações de status do processador
+        await sub.subscribe('processor:status', async (message: string) => {
             const { name, status }: ProcessorStatus = JSON.parse(message);
 
             switch (status) {
@@ -72,7 +75,8 @@ export default class Server extends Utils {
             }
         });
 
-        await sub.subscribe('processed', (message: string) => {
+        // Listener para mensagens de processamento concluído
+        await sub.subscribe('processed', async (message: string) => {
             const { status, imageId, serviceName, error } = JSON.parse(message);
 
             if (status === 'success')
@@ -85,7 +89,7 @@ export default class Server extends Utils {
                 );
 
             this.services[serviceName] = 'idle';
-            this.processQueue();
+            await this.processQueue();
         });
     }
 
@@ -139,14 +143,15 @@ export default class Server extends Utils {
         if (!availableService) return;
         if (this.queue.length === 0) return;
 
-        const task = this.queue[0]; // Não remova da fila ainda.
+        // Tente pegar a próxima tarefa da fila
+        const task = this.queue[0]; // Pegue a próxima tarefa sem removê-la.
         const lockKey = `lock:image:${task.imageId}`; // Lock baseado no ID da imagem.
 
         // Tente adquirir o lock
         const lockAcquired = await this.redis.set(lockKey, 'locked', { NX: true, PX: 30000 }); // Timeout de 30s
-        if (!lockAcquired) return; // Se o lock já existe, outra instância está processando.
+        if (!lockAcquired) return; // Outra instância está processando esta imagem.
 
-        // Remova da fila apenas após adquirir o lock
+        // Após adquirir o lock, remova a tarefa da fila
         this.queue.shift();
 
         // Atualize o serviço como "processing"
@@ -174,6 +179,10 @@ export default class Server extends Utils {
     }
 
     private getAvailableService(): ProcessorName | null {
+        this.logger.log(
+            `Estado atual dos serviços: ${JSON.stringify(this.services)}, Tamanho da fila: ${this.queue.length}`
+        );
+
         return (
             (Object.keys(this.services).find(
                 serviceName => this.services[serviceName] === 'idle'
