@@ -9,8 +9,12 @@
     "private": false,
     "scripts": {
         "build": "tsup src",
-        "dev": "tsx watch src/index.ts",
-        "start": "node dist/index.js"
+        "dev": "tsx watch src/processor.ts",
+        "dev:server": "tsx watch src/server.ts",
+        "start": "node dist/processor.js",
+        "start:server": "node dist/server.js",
+        "lint": "eslint src",
+        "lint:fix": "eslint src --fix"
     },
     "devDependencies": {
         "@types/backblaze-b2": "^1.5.6",

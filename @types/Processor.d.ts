@@ -20,4 +20,9 @@ interface ProcessorStats {
     processTime: number;
 }
 
+interface ProcessorStatus {
+    name: ProcessorName;
+    status: 'on' | 'off' | 'idle';
+}
+
 type ProcessorName = 'Maria' | 'Rose' | 'Sina' | 'Ymir';

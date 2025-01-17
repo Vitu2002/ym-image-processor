@@ -2,6 +2,7 @@ version: '3.8'
 
 x-processor: &processor
   build: .
+  command: yarn start
   container_name: ym-image-processor
   restart: unless-stopped
   deploy:
@@ -12,6 +13,11 @@ x-processor: &processor
     - coolify
 
 services:
+  paradis:
+    <<: *processor
+    command: yarn start:server
+    container_name: paradis-ym
+
   maria:
     <<: *processor
     container_name: maria-ym

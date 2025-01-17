@@ -3,6 +3,6 @@ import { config } from 'dotenv';
 config();
 logger.start();
 
-import Core from '@core';
+import Server from './manager/index';
 
-new Core();
+const server = new Server();

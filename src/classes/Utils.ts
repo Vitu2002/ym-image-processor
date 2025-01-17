@@ -1,12 +1,13 @@
 import * as os from 'os';
 import * as osu from 'os-utils';
+import { RedisClientType } from 'redis';
 
 export default class Utils {
     readonly checkRamInterval = 60000; // 1 min
     readonly maxRam = 2684254560; // 2.5GB
     restart: boolean = false;
 
-    constructor(load?: boolean) {
+    constructor(load?: boolean, redis?: RedisClientType) {
         if (load)
             setInterval(() => {
                 this.restart = this.ramLimitUsage();
@@ -14,22 +15,12 @@ export default class Utils {
     }
 
     ramLimitUsage() {
-        const usage = os.totalmem() - os.freemem();
-        console.log({
-            total: this.format(os.totalmem()),
-            totalBytes: os.totalmem(),
-            free: this.format(os.freemem()),
-            freeBytes: os.freemem(),
-            usage: this.format(usage),
-            usageBytes: usage,
-            max: usage > this.maxRam
-        });
+        const usage = process.memoryUsage().rss;
         return usage > this.maxRam;
     }
 
     async stats(): Promise<ProcessorStats> {
         const cpu = await new Promise<number>(res => osu.cpuUsage(value => res(value)));
-
         return {
             name: process.env.PROCESSOR_NAME || 'Ymir',
             cpu,
